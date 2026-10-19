@@ -1,0 +1,31 @@
+[package]
+name = "alekdlc-launcher"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aes-gcm = "0.11.1"
+arboard = { version = "3.4.0", default-features = false }
+base64 = "0.23.1"
+ed25519-dalek = "3.0.0"
+getrandom = "0.4.3"
+glow = "0.18.0"
+glutin = "0.32.3"
+glutin-winit = "0.5.0"
+hkdf = "0.13.0"
+obfstr = "0.4.6"
+raw-window-handle = "0.6.2"
+resvg = "0.48.1"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha1 = "0.11.0"
+sha2 = "0.11.1"
+swash = "0.2.10"
+ureq = { version = "3.4.2", features = ["json"] }
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_System_Threading", "Win32_System_Diagnostics_ToolHelp", "Win32_System_SystemInformation"] }
+winit = "0.30.13"
+x25519-dalek = { version = "3.0.0", features = ["static_secrets"] }
+zip = { version = "9.0.5", default-features = false, features = ["deflate"] }
+
+[build-dependencies]
+winres = "0.1.12"

@@ -1,0 +1,23 @@
+# Rust build output
+/target
+
+# Dev artifacts (screenshots, scratch)
+/shots
+/prototype
+HANDOFF.md
+/examples
+
+# Rustfmt backups & debug symbols
+*.rs.bk
+*.pdb
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
