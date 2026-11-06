@@ -317,7 +317,7 @@ impl Installer {
         }
 
         if let Some(keep) = plan.keep_mods {
-            prune_mods(&Paths::mods(), &keep);
+            prune_mods(&Paths::mods(), &keep, &mut self.installed);
         }
         prune_legacy_java();
         if let Some(keep) = plan.keep_java {
@@ -623,22 +623,23 @@ fn encode_path(path: &str) -> String {
     out
 }
 
-fn prune_mods(mods_dir: &Path, keep: &HashSet<String>) {
-    let Ok(entries) = fs::read_dir(mods_dir) else {
-        return;
-    };
-    for entry in entries.flatten() {
-        let path = entry.path();
-        if !is_jar(&path) {
-            continue;
-        }
-        let Some(name) = path.file_name().and_then(|n| n.to_str()) else {
-            continue;
-        };
-        if name == crate::secret!("client.jar") || name == crate::secret!("fabric-api.jar") || keep.contains(name) {
-            continue;
-        }
-        let _ = fs::remove_file(&path);
+fn prune_mods(mods_dir: &Path, keep: &HashSet<String>, installed: &mut HashMap<String, String>) {
+    let stale: Vec<String> = installed
+        .keys()
+        .filter(|key| {
+            let path = Path::new(key.as_str());
+            if path.parent() != Some(mods_dir) || !is_jar(path) {
+                return false;
+            }
+            path.file_name()
+                .and_then(|n| n.to_str())
+                .is_some_and(|name| name != crate::secret!("client.jar") && name != crate::secret!("fabric-api.jar") && !keep.contains(name))
+        })
+        .cloned()
+        .collect();
+    for key in stale {
+        let _ = fs::remove_file(&key);
+        installed.remove(&key);
     }
 }
 

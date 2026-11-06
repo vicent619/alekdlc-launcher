@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use serde_json::{json, Value};
 
+use crate::config::Config;
 use crate::net::channel::SecureChannel;
 use crate::net::error::ApiError;
 
@@ -106,14 +107,14 @@ impl<'a> Api<'a> {
     pub fn login(&self, login: &str, password: &str, hwid: &str) -> Result<Auth, ApiError> {
         self.typed(
             crate::secret!("/api/v1/launcher/auth/login"),
-            &json!({ crate::secret!("login"): login, crate::secret!("password"): password, crate::secret!("hwid"): hwid }),
+            &json!({ crate::secret!("login"): login, crate::secret!("password"): password, crate::secret!("hwid"): hwid, crate::secret!("launcher"): Config::version() }),
         )
     }
 
     pub fn refresh(&self, refresh_token: &str, hwid: &str) -> Result<Auth, ApiError> {
         self.typed(
             crate::secret!("/api/v1/launcher/auth/refresh"),
-            &json!({ crate::secret!("refreshToken"): refresh_token, crate::secret!("hwid"): hwid }),
+            &json!({ crate::secret!("refreshToken"): refresh_token, crate::secret!("hwid"): hwid, crate::secret!("launcher"): Config::version() }),
         )
     }
 
@@ -133,7 +134,7 @@ impl<'a> Api<'a> {
     pub fn session(&self, access_token: &str, hwid: &str) -> Result<GameSession, ApiError> {
         self.typed(
             crate::secret!("/api/v1/launcher/session"),
-            &json!({ crate::secret!("accessToken"): access_token, crate::secret!("hwid"): hwid }),
+            &json!({ crate::secret!("accessToken"): access_token, crate::secret!("hwid"): hwid, crate::secret!("launcher"): Config::version() }),
         )
     }
 

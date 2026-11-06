@@ -127,6 +127,7 @@ fn build_table() -> std::collections::HashMap<String, (String, String)> {
     put(&mut map, crate::secret!("error.INVALID_TOKEN"), crate::secret!("Сессия истекла, войдите снова"), crate::secret!("Session expired, please sign in again"));
     put(&mut map, crate::secret!("error.RATE_LIMITED"), crate::secret!("Слишком много попыток. Подождите минуту."), crate::secret!("Too many attempts. Wait a minute."));
     put(&mut map, crate::secret!("error.MAINTENANCE"), crate::secret!("Идут технические работы. Попробуйте позже."), crate::secret!("Maintenance in progress. Try again later."));
+    put(&mut map, crate::secret!("error.UPDATE_REQUIRED"), crate::secret!("Вышла новая версия лаунчера. Обновите его, чтобы продолжить."), crate::secret!("A new launcher version is out. Update it to continue."));
     put(&mut map, crate::secret!("error.VALIDATION"), crate::secret!("Заполните логин и пароль"), crate::secret!("Enter your username and password"));
     put(&mut map, crate::secret!("error.NOT_FOUND"), crate::secret!("Файл не найден на сервере"), crate::secret!("File not found on the server"));
     put(&mut map, crate::secret!("error.OFFLINE"), crate::secret!("Нет соединения с сервером"), crate::secret!("No connection to the server"));

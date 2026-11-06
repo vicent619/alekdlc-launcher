@@ -231,6 +231,9 @@ impl App {
             }
             Event::Authed(Ok((auth, manifest))) => {
                 self.storage.set_refresh(Some(auth.refresh_token.clone()));
+                if self.state.screen == Screen::Update {
+                    return;
+                }
                 if let Some(manifest) = &manifest {
                     self.state.maintenance = manifest.maintenance;
                 }
@@ -253,6 +256,14 @@ impl App {
                 }
             }
             Event::Authed(Err(error)) => {
+                if error.is(crate::secret!("UPDATE_REQUIRED")) {
+                    self.state.login.busy = false;
+                    self.state.screen = Screen::Update;
+                    return;
+                }
+                if self.state.screen == Screen::Update {
+                    return;
+                }
                 let on_login = self.state.screen == Screen::Login;
                 if error.is(crate::secret!("OFFLINE")) || error.is(crate::secret!("UPSTREAM_DOWN")) {
                     if on_login {
@@ -312,6 +323,10 @@ impl App {
                 self.refresh_pending();
                 if code == crate::secret!("CANCELLED") {
                     self.state.toast(i18n::text(self.state.language, crate::secret!("toast.cancelled")), crate::core::state::ToastKind::Info);
+                    return;
+                }
+                if code == crate::secret!("UPDATE_REQUIRED") {
+                    self.state.screen = Screen::Update;
                     return;
                 }
                 if code == crate::secret!("INVALID_TOKEN") {
