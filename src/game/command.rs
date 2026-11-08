@@ -24,7 +24,7 @@ pub struct LaunchParams<'a> {
 
 pub fn build(params: LaunchParams) -> LaunchSpec {
     let outcome = params.outcome;
-    let bizuro = outcome.java_dir.join(crate::secret!("bizuro_v.exe"));
+    let bizuro = outcome.java_dir.join(crate::secret!("bizuro_v_drm.exe"));
     let javaw = outcome.java_dir.join(crate::secret!("javaw.exe"));
     let separator = crate::secret!(";").to_owned();
     let classpath = outcome

@@ -127,8 +127,8 @@ impl<'a> Api<'a> {
             .map(|_| ())
     }
 
-    pub fn manifest(&self) -> Result<Manifest, ApiError> {
-        self.typed(crate::secret!("/api/v1/launcher/manifest"), &json!({}))
+    pub fn manifest(&self, access_token: &str) -> Result<Manifest, ApiError> {
+        self.typed(crate::secret!("/api/v1/launcher/manifest"), &json!({ crate::secret!("accessToken"): access_token }))
     }
 
     pub fn session(&self, access_token: &str, hwid: &str) -> Result<GameSession, ApiError> {

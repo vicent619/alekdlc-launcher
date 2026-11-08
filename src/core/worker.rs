@@ -111,7 +111,7 @@ fn run<W: Fn()>(channel: &SecureChannel, task: Task, events: &Sender<Event>, wak
 
 fn authenticate(api: &Api, auth: Result<Auth, ApiError>) -> Result<Session, ApiError> {
     auth.map(|auth| {
-        let manifest = api.manifest().ok();
+        let manifest = api.manifest(&auth.access_token).ok();
         (auth, manifest)
     })
 }
@@ -142,7 +142,7 @@ fn play_inner<W: Fn()>(
     let mut outcome = None;
     let scratch = Scratch;
     for attempt in 0..2 {
-        let manifest = api.manifest().map_err(|e| fail(e, installed.clone()))?;
+        let manifest = api.manifest(&request.access).map_err(|e| fail(e, installed.clone()))?;
         let mut installer = Installer::new(installed.clone(), request.runtime.clone());
         let mut last = Instant::now();
         match installer.run(

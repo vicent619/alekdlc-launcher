@@ -95,13 +95,14 @@ impl Item {
 }
 
 struct Bundle {
+    name: String,
     base: String,
     bytes: u64,
 }
 
 impl Bundle {
     fn name(&self) -> &str {
-        self.base.rsplit('/').next().unwrap_or_default()
+        &self.name
     }
 
     fn worth(&self, items: &[&Item]) -> bool {
@@ -140,9 +141,9 @@ struct Plan {
 }
 
 impl Plan {
-    fn bundle(&mut self, base: &str, index: &GameIndex) -> usize {
+    fn bundle(&mut self, name: &str, base: &str, index: &GameIndex) -> usize {
         let bytes = if index.size > 0 { index.size } else { index.files.iter().map(|entry| entry.size).sum() };
-        self.bundles.push(Bundle { base: base.to_owned(), bytes });
+        self.bundles.push(Bundle { name: name.to_owned(), base: base.to_owned(), bytes });
         self.bundles.len() - 1
     }
 }
@@ -226,7 +227,7 @@ impl Installer {
                 });
             } else if kind == self.runtime.file {
                 let index = self.index(&url)?;
-                let bundle = plan.bundle(&url, &index);
+                let bundle = plan.bundle(&kind, &url, &index);
                 let mut keep = HashSet::new();
                 for entry in index.files {
                     let target = java_dir.join(&entry.path);
@@ -245,7 +246,7 @@ impl Installer {
                 });
             } else if kind == crate::secret!("game") {
                 let index = self.index(&url)?;
-                let bundle = plan.bundle(&url, &index);
+                let bundle = plan.bundle(&kind, &url, &index);
                 if let Some(id) = index.asset_index {
                     plan.asset_index = id;
                 }
@@ -255,7 +256,7 @@ impl Installer {
                 }
             } else if kind == crate::secret!("mods") {
                 let index = self.index(&url)?;
-                let bundle = plan.bundle(&url, &index);
+                let bundle = plan.bundle(&kind, &url, &index);
                 let mut keep = HashSet::new();
                 for entry in index.files {
                     let name = entry.path.rsplit('/').next().unwrap_or(&entry.path).to_owned();

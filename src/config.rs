@@ -4,7 +4,7 @@ pub struct Config;
 
 impl Config {
     pub fn version() -> String {
-        secret!("1.2").to_owned()
+        secret!("1.4").to_owned()
     }
 
     pub const MEMORY_MIN: u32 = 2;
